@@ -12,6 +12,65 @@ const Index = () => {
   const [promoCode, setPromoCode] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState('');
+
+  const handleAuth = () => {
+    setAuthError('');
+    
+    if (isLogin) {
+      // Вход в систему
+      const users = JSON.parse(localStorage.getItem('minecraftUsers') || '{}');
+      if (users[email] && users[email] === password) {
+        setIsLoggedIn(true);
+        setCurrentUser(email);
+        setIsAuthDialogOpen(false);
+        // Имитация отправки на почту
+        console.log(`Логин отправлен на sims.forgett@mail.ru: ${email}`);
+      } else {
+        setAuthError('Аккаунт не найден или неверный пароль');
+      }
+    } else {
+      // Регистрация
+      if (password !== confirmPassword) {
+        setAuthError('Пароли не совпадают');
+        return;
+      }
+      if (password.length < 6) {
+        setAuthError('Пароль должен быть не менее 6 символов');
+        return;
+      }
+      
+      const users = JSON.parse(localStorage.getItem('minecraftUsers') || '{}');
+      if (users[email]) {
+        setAuthError('Аккаунт с такой почтой уже существует');
+        return;
+      }
+      
+      users[email] = password;
+      localStorage.setItem('minecraftUsers', JSON.stringify(users));
+      
+      setIsLoggedIn(true);
+      setCurrentUser(email);
+      setIsAuthDialogOpen(false);
+      // Имитация отправки на почту
+      console.log(`Новый аккаунт отправлен на sims.forgett@mail.ru: ${email}`);
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setCurrentUser('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+  };
 
   const donationPackages = [
     {
@@ -65,10 +124,113 @@ const Index = () => {
               <a href="#stats" className="hover:text-minecraft-blue transition-colors">Статистика</a>
               <a href="#support" className="hover:text-minecraft-blue transition-colors">Поддержка</a>
             </nav>
-            <Button className="bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow">
-              <Icon name="User" size={16} className="mr-2" />
-              Личный кабинет
-            </Button>
+            <Dialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow">
+                  <Icon name="User" size={16} className="mr-2" />
+                  {isLoggedIn ? `Привет, ${currentUser.split('@')[0]}!` : 'Личный кабинет'}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-minecraft-dark border-gray-800 text-white max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl minecraft-text text-center">
+                    {isLoggedIn ? 'Личный кабинет' : (isLogin ? 'Вход в аккаунт' : 'Регистрация')}
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300 text-center">
+                    {isLoggedIn ? `Добро пожаловать, ${currentUser}!` : 'Введите свои данные для продолжения'}
+                  </DialogDescription>
+                </DialogHeader>
+                
+                {isLoggedIn ? (
+                  <div className="space-y-4">
+                    <div className="text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-minecraft-gold flex items-center justify-center">
+                        <Icon name="User" size={32} className="text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold minecraft-text">Статус: {selectedPackage ? selectedPackage.toUpperCase() : 'Обычный игрок'}</h3>
+                      <p className="text-gray-400 mt-2">Данные сохранены на sims.forgett@mail.ru</p>
+                    </div>
+                    <Button 
+                      className="w-full bg-red-600 hover:bg-red-700 hover-glow"
+                      onClick={handleLogout}
+                    >
+                      <Icon name="LogOut" size={16} className="mr-2" />
+                      Выйти из аккаунта
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {authError && (
+                      <div className="bg-red-900/50 border border-red-500 rounded-lg p-3 text-red-200 text-sm">
+                        <Icon name="AlertCircle" size={16} className="inline mr-2" />
+                        {authError}
+                      </div>
+                    )}
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Email</label>
+                        <Input
+                          type="email"
+                          placeholder="your@email.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="bg-gray-800 border-gray-700 text-white hover-glow"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Пароль</label>
+                        <Input
+                          type="password"
+                          placeholder="Введите пароль"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="bg-gray-800 border-gray-700 text-white hover-glow"
+                        />
+                      </div>
+                      
+                      {!isLogin && (
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Подтвердите пароль</label>
+                          <Input
+                            type="password"
+                            placeholder="Повторите пароль"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="bg-gray-800 border-gray-700 text-white hover-glow"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <Button 
+                      className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow pulse-glow"
+                      onClick={handleAuth}
+                    >
+                      <Icon name={isLogin ? "LogIn" : "UserPlus"} size={16} className="mr-2" />
+                      {isLogin ? 'Войти' : 'Зарегистрироваться'}
+                    </Button>
+                    
+                    <div className="text-center">
+                      <button
+                        className="text-minecraft-blue hover:text-minecraft-blue/80 text-sm transition-colors"
+                        onClick={() => {
+                          setIsLogin(!isLogin);
+                          setAuthError('');
+                        }}
+                      >
+                        {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Есть аккаунт? Войдите'}
+                      </button>
+                    </div>
+                    
+                    <div className="text-xs text-gray-500 text-center">
+                      Данные сохраняются на sims.forgett@mail.ru
+                    </div>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </header>
