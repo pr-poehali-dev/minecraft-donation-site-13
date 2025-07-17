@@ -5,11 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [promoCode, setPromoCode] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const donationPackages = [
     {
@@ -84,10 +86,61 @@ const Index = () => {
                 Покупай донат-пакеты и получай эксклюзивные привилегии, уникальные предметы и доступ к закрытым зонам сервера.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-minecraft-orange hover:bg-minecraft-orange/80 text-white font-semibold hover-glow pulse-glow">
-                  <Icon name="ShoppingCart" size={20} className="mr-2" />
-                  Выбрать пакет
-                </Button>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="lg" className="bg-minecraft-orange hover:bg-minecraft-orange/80 text-white font-semibold hover-glow pulse-glow">
+                      <Icon name="ShoppingCart" size={20} className="mr-2" />
+                      Выбрать пакет
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-minecraft-dark border-gray-800 text-white max-w-4xl">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl minecraft-text text-center">Выбери свой донат-пакет</DialogTitle>
+                      <DialogDescription className="text-gray-300 text-center">
+                        Получи уникальные привилегии и стань легендой сервера
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid md:grid-cols-3 gap-6 mt-6">
+                      {donationPackages.map((pkg, index) => (
+                        <Card 
+                          key={pkg.id} 
+                          className="bg-minecraft-dark/60 border-gray-700 hover-scale hover-glow animate-fade-in transition-all duration-300"
+                          style={{ animationDelay: `${index * 0.1}s` }}
+                        >
+                          <CardHeader className="text-center">
+                            <div className={`w-16 h-16 mx-auto mb-4 rounded-full ${pkg.color} flex items-center justify-center animate-glow`}>
+                              <Icon name={pkg.icon} size={32} className="text-white" />
+                            </div>
+                            <CardTitle className="text-xl minecraft-text">{pkg.name}</CardTitle>
+                            <CardDescription className="text-2xl font-bold text-minecraft-gold">
+                              {pkg.price}₽
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <ul className="space-y-2 mb-6">
+                              {pkg.features.map((feature, idx) => (
+                                <li key={idx} className="flex items-center text-sm text-gray-300">
+                                  <Icon name="Check" size={14} className="text-minecraft-green mr-2 flex-shrink-0" />
+                                  {feature}
+                                </li>
+                              ))}
+                            </ul>
+                            <Button 
+                              className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift pulse-glow"
+                              onClick={() => {
+                                setSelectedPackage(pkg.id);
+                                setIsDialogOpen(false);
+                              }}
+                            >
+                              <Icon name="Zap" size={16} className="mr-2" />
+                              Купить сейчас
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Button size="lg" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow">
                   <Icon name="Play" size={20} className="mr-2" />
                   Как это работает
@@ -163,12 +216,13 @@ const Index = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button 
-                    className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift"
-                    onClick={() => setSelectedPackage(pkg.id)}
-                  >
-                    Выбрать пакет
-                  </Button>
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift">
+                        Выбрать пакет
+                      </Button>
+                    </DialogTrigger>
+                  </Dialog>
                 </CardContent>
               </Card>
             ))}
