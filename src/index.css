@@ -104,8 +104,55 @@
     background: #1a1f2c;
   }
 
+  .galaxy-bg {
+    background-image: url("/img/d2bcd31b-5fe8-4f5d-86e3-e37c6a778ed7.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  .galaxy-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 31, 44, 0.85);
+    backdrop-filter: blur(2px);
+  }
+
   .hover-scale {
     @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-lg;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(13, 79, 140, 0.5);
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl;
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(13, 79, 140, 0.5);
+    }
+    50% {
+      box-shadow:
+        0 0 25px rgba(13, 79, 140, 0.8),
+        0 0 35px rgba(13, 79, 140, 0.6);
+    }
   }
 
   .minecraft-text {

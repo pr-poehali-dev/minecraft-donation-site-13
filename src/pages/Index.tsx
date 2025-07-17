@@ -45,7 +45,8 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-minecraft-dark text-white">
+    <div className="min-h-screen bg-minecraft-dark text-white galaxy-bg">
+      <div className="relative z-10">
       {/* Header */}
       <header className="border-b border-gray-800 bg-minecraft-dark/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -62,7 +63,7 @@ const Index = () => {
               <a href="#stats" className="hover:text-minecraft-blue transition-colors">Статистика</a>
               <a href="#support" className="hover:text-minecraft-blue transition-colors">Поддержка</a>
             </nav>
-            <Button className="bg-minecraft-blue hover:bg-minecraft-blue/80">
+            <Button className="bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow">
               <Icon name="User" size={16} className="mr-2" />
               Личный кабинет
             </Button>
@@ -83,11 +84,11 @@ const Index = () => {
                 Покупай донат-пакеты и получай эксклюзивные привилегии, уникальные предметы и доступ к закрытым зонам сервера.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-minecraft-orange hover:bg-minecraft-orange/80 text-white font-semibold">
+                <Button size="lg" className="bg-minecraft-orange hover:bg-minecraft-orange/80 text-white font-semibold hover-glow pulse-glow">
                   <Icon name="ShoppingCart" size={20} className="mr-2" />
                   Выбрать пакет
                 </Button>
-                <Button size="lg" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10">
+                <Button size="lg" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow">
                   <Icon name="Play" size={20} className="mr-2" />
                   Как это работает
                 </Button>
@@ -163,7 +164,7 @@ const Index = () => {
                     ))}
                   </ul>
                   <Button 
-                    className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80"
+                    className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift"
                     onClick={() => setSelectedPackage(pkg.id)}
                   >
                     Выбрать пакет
@@ -191,7 +192,7 @@ const Index = () => {
                   onChange={(e) => setPromoCode(e.target.value)}
                   className="bg-gray-800 border-gray-700 text-white"
                 />
-                <Button className="bg-minecraft-green hover:bg-minecraft-green/80">
+                <Button className="bg-minecraft-green hover:bg-minecraft-green/80 hover-glow">
                   <Icon name="Gift" size={16} />
                 </Button>
               </div>
@@ -365,7 +366,7 @@ const Index = () => {
                 <Button 
                   size="sm" 
                   variant="outline" 
-                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10"
+                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift"
                   onClick={() => window.open('https://vk.com', '_blank')}
                 >
                   <Icon name="MessageCircle" size={16} />
@@ -373,12 +374,12 @@ const Index = () => {
                 <Button 
                   size="sm" 
                   variant="outline" 
-                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10"
+                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift"
                   onClick={() => window.open('https://vk.com/friends', '_blank')}
                 >
                   <Icon name="Users" size={16} />
                 </Button>
-                <Button size="sm" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10">
+                <Button size="sm" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift">
                   <Icon name="Globe" size={16} />
                 </Button>
               </div>
@@ -389,6 +390,7 @@ const Index = () => {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
