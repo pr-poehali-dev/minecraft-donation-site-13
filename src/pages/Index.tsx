@@ -20,9 +20,41 @@ const Index = () => {
   const [authError, setAuthError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState('');
+  const [isErrorHighlighted, setIsErrorHighlighted] = useState(false);
+  const [notificationSent, setNotificationSent] = useState(false);
+
+  const sendNotification = (type: 'login' | 'register' | 'error', data: any) => {
+    const timestamp = new Date().toLocaleString('ru-RU');
+    const message = type === 'login' 
+      ? `Попытка входа: ${data.email} в ${timestamp}`
+      : type === 'register'
+      ? `Новая регистрация: ${data.email} в ${timestamp}`
+      : `Ошибка входа: ${data.email} - ${data.error} в ${timestamp}`;
+    
+    // Имитация отправки на почту
+    console.log(`📧 Уведомление отправлено на sims.forgett@mail.ru: ${message}`);
+    
+    // Показываем уведомление пользователю
+    setNotificationSent(true);
+    setTimeout(() => setNotificationSent(false), 3000);
+  };
+
+  const showErrorWithHighlight = (errorMessage: string) => {
+    setAuthError(errorMessage);
+    setIsErrorHighlighted(true);
+    
+    // Отправляем уведомление об ошибке
+    sendNotification('error', { email, error: errorMessage });
+    
+    // Убираем подсветку через 2 секунды
+    setTimeout(() => {
+      setIsErrorHighlighted(false);
+    }, 2000);
+  };
 
   const handleAuth = () => {
     setAuthError('');
+    setIsErrorHighlighted(false);
     
     if (isLogin) {
       // Вход в систему
@@ -31,25 +63,26 @@ const Index = () => {
         setIsLoggedIn(true);
         setCurrentUser(email);
         setIsAuthDialogOpen(false);
-        // Имитация отправки на почту
-        console.log(`Логин отправлен на sims.forgett@mail.ru: ${email}`);
+        
+        // Отправляем уведомление об успешном входе
+        sendNotification('login', { email });
       } else {
-        setAuthError('Аккаунт не найден или неверный пароль');
+        showErrorWithHighlight('Аккаунт не найден или неверный пароль');
       }
     } else {
       // Регистрация
       if (password !== confirmPassword) {
-        setAuthError('Пароли не совпадают');
+        showErrorWithHighlight('Пароли не совпадают');
         return;
       }
       if (password.length < 6) {
-        setAuthError('Пароль должен быть не менее 6 символов');
+        showErrorWithHighlight('Пароль должен быть не менее 6 символов');
         return;
       }
       
       const users = JSON.parse(localStorage.getItem('minecraftUsers') || '{}');
       if (users[email]) {
-        setAuthError('Аккаунт с такой почтой уже существует');
+        showErrorWithHighlight('Аккаунт с такой почтой уже существует');
         return;
       }
       
@@ -59,8 +92,9 @@ const Index = () => {
       setIsLoggedIn(true);
       setCurrentUser(email);
       setIsAuthDialogOpen(false);
-      // Имитация отправки на почту
-      console.log(`Новый аккаунт отправлен на sims.forgett@mail.ru: ${email}`);
+      
+      // Отправляем уведомление о регистрации
+      sendNotification('register', { email });
     }
   };
 
@@ -161,9 +195,20 @@ const Index = () => {
                 ) : (
                   <div className="space-y-4">
                     {authError && (
-                      <div className="bg-red-900/50 border border-red-500 rounded-lg p-3 text-red-200 text-sm">
+                      <div className={`border rounded-lg p-3 text-sm transition-all duration-500 ${
+                        isErrorHighlighted 
+                          ? 'bg-red-600/80 border-red-400 text-white shadow-lg shadow-red-500/50 animate-pulse' 
+                          : 'bg-red-900/50 border-red-500 text-red-200'
+                      }`}>
                         <Icon name="AlertCircle" size={16} className="inline mr-2" />
                         {authError}
+                      </div>
+                    )}
+                    
+                    {notificationSent && (
+                      <div className="bg-minecraft-blue/20 border border-minecraft-blue rounded-lg p-3 text-minecraft-blue text-sm animate-fade-in">
+                        <Icon name="Mail" size={16} className="inline mr-2" />
+                        Уведомление отправлено на sims.forgett@mail.ru
                       </div>
                     )}
                     
