@@ -370,7 +370,12 @@ const Index = () => {
                 >
                   <Icon name="MessageCircle" size={16} />
                 </Button>
-                <Button size="sm" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10"
+                  onClick={() => window.open('https://vk.com/friends', '_blank')}
+                >
                   <Icon name="Users" size={16} />
                 </Button>
                 <Button size="sm" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10">
