@@ -97,5 +97,19 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Roboto", sans-serif;
+  }
+
+  html {
+    background: #1a1f2c;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  .minecraft-text {
+    font-family: "Roboto", monospace;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
   }
 }
