@@ -105,7 +105,7 @@
   }
 
   .galaxy-bg {
-    background-image: url("/img/d2bcd31b-5fe8-4f5d-86e3-e37c6a778ed7.jpg");
+    background-image: url("/img/fa08f234-047e-43b5-a297-e102561b2d9c.jpg");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -119,8 +119,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(26, 31, 44, 0.85);
-    backdrop-filter: blur(2px);
+    background: rgba(26, 31, 44, 0.6);
+    backdrop-filter: blur(1px);
   }
 
   .hover-scale {
@@ -155,8 +155,112 @@
     }
   }
 
+  @keyframes droplet-blue {
+    0% {
+      transform: translateX(-50px) translateY(-20px) rotate(0deg);
+    }
+    25% {
+      transform: translateX(50px) translateY(-20px) rotate(90deg);
+    }
+    50% {
+      transform: translateX(50px) translateY(20px) rotate(180deg);
+    }
+    75% {
+      transform: translateX(-50px) translateY(20px) rotate(270deg);
+    }
+    100% {
+      transform: translateX(-50px) translateY(-20px) rotate(360deg);
+    }
+  }
+
+  @keyframes droplet-orange {
+    0% {
+      transform: translateX(-40px) translateY(-15px) rotate(0deg);
+    }
+    25% {
+      transform: translateX(40px) translateY(-15px) rotate(90deg);
+    }
+    50% {
+      transform: translateX(40px) translateY(15px) rotate(180deg);
+    }
+    75% {
+      transform: translateX(-40px) translateY(15px) rotate(270deg);
+    }
+    100% {
+      transform: translateX(-40px) translateY(-15px) rotate(360deg);
+    }
+  }
+
+  @keyframes droplet-purple {
+    0% {
+      transform: translateX(-35px) translateY(-18px) rotate(0deg);
+    }
+    25% {
+      transform: translateX(35px) translateY(-18px) rotate(90deg);
+    }
+    50% {
+      transform: translateX(35px) translateY(18px) rotate(180deg);
+    }
+    75% {
+      transform: translateX(-35px) translateY(18px) rotate(270deg);
+    }
+    100% {
+      transform: translateX(-35px) translateY(-18px) rotate(360deg);
+    }
+  }
+
+  .button-droplet {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .button-droplet::before {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(45deg, #0d4f8c, #00bfff);
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .button-droplet:hover::before {
+    opacity: 1;
+    animation: droplet-blue 2s infinite linear;
+  }
+
+  .button-droplet-orange::before {
+    background: linear-gradient(45deg, #ff6b35, #ffd700);
+  }
+
+  .button-droplet-orange:hover::before {
+    animation: droplet-orange 2.2s infinite linear;
+  }
+
+  .button-droplet-purple::before {
+    background: linear-gradient(45deg, #9c27b0, #e91e63);
+  }
+
+  .button-droplet-purple:hover::before {
+    animation: droplet-purple 1.8s infinite linear;
+  }
+
   .minecraft-text {
     font-family: "Roboto", monospace;
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  .hover-droplet {
+    @apply button-droplet;
+  }
+
+  .hover-droplet-orange {
+    @apply button-droplet button-droplet-orange;
+  }
+
+  .hover-droplet-purple {
+    @apply button-droplet button-droplet-purple;
   }
 }

